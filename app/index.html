@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-i18n/angular-locale_fr-fr.js"></script>
+    <script src="app.js"></script>
+
+    <style type="text/css">
+        tr.big td { font-weight: bold; }
+    </style>
+
+    <title>Title</title>
+</head>
+<body ng-controller="commandeListCTRL as cmdList">
+
+<table border="1">
+    <tr>
+        <td> référence article</td>
+        <td>libellé</td>
+        <td>prix unitaire HT</td>
+        <td>quantité</td>
+        <td>montant HT</td>
+        <td>montant TTC</td>
+    </tr>
+    <tr ng-repeat="cmd in cmdList.article"  ng-class="{big: cmdList.prixHT(cmd) > 1000}">
+        <td>{{cmd.ref}}</td>
+        <td>{{cmd.lbl}}</td>
+        <td>{{cmd.prixuni |currency}}</td>
+        <td> <input type="number" ng-model="cmd.quantite"></td>
+        <td>{{cmdList.prixHT(cmd) |currency}}</td>
+        <td>{{cmdList.prixTTC(cmd) |currency}}</td>
+        <td><input type="button" value="Supprimer"
+                   ng-click="cmdList.supprimerCmd(cmd)"/></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td> {{cmdList.totalHT() |currency}}</td>
+        <td>{{cmdList.totalTTC() |currency}}</td>
+    </tr>
+</table>
+
+<form ng-submit="cmdList.ajoutArticle()">
+    <table border="1">
+        <tr>
+            <td>
+                <input type="text" size="10" ng-model="cmdList.frmArticle.ref">
+            </td>
+            <td>
+                <!--<input type="text" size="5" ng-model="cmdList.frmArticle.lbl">-->
+
+                <select style="width: 150px;"   ng-model="cmdList.frmArticle.selectedItem"
+                        ng-options="item.title for item in cmdList.catalog">
+                    </select>
+            </td>
+            <td><input type="text" size="10" ng-model="cmdList.frmArticle.prixuni"></td>
+            <td><input type="number" size="10" ng-model="cmdList.frmArticle.quantite"></td>
+            <td><input type="text" size="3" disabled > </td>
+            <td><input type="text" size="3" disabled > </td>
+        </tr>
+    </table>
+    <input type="submit" value="Ajouter">
+</form>
+
+
+</body>
+</html>
